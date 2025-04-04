@@ -21,16 +21,12 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col"></div>
-            </div>
-            <div class="row">
-                <div class="col"></div>
-            </div>
-            <div class="row">
-                <div class="col"></div>
-            </div>
-            <div class="row">
-                <div class="col"></div>
+                <div class="col-md-12">
+                    <h1>Hello</h1>
+                </div>
+                <div class="col-md-12"></div>
+                <div class="col-md-12"></div>
+                <div class="col-md-12"></div>
             </div>
         </div>
     </body>
