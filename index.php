@@ -21,12 +21,53 @@
     <body>
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h1>Hello</h1>
+                <div class="col-md-4">
+
                 </div>
-                <div class="col-md-12"></div>
-                <div class="col-md-12"></div>
-                <div class="col-md-12"></div>
+                <div class="col-md-4 mt-5">
+                    <form action="Secciones/index.php" method="post">
+                        <div class="card">
+                            <div class="card-header">Inicio de sesion</div>
+                            <div class="card-body">
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Usuario</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="usuario"
+                                        id="usuario"
+                                        aria-describedby="helpId"
+                                        placeholder=""
+                                    />
+                                    <small id="helpId" class="form-text text-muted">Escriba su usuario</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        name="contrasenia"
+                                        id="contrasenia"
+                                        aria-describedby="helpId"
+                                        placeholder="password"
+                                    />
+                                    <small id="helpId" class="form-text text-muted">Ingrese su contraseña</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary btn-block"
+                                        id="btnLogin"
+                                    >
+                                        Iniciar sesion
+                                    </button>
+                                </div>
+                            </div>
+                    </form>
+                </div>
             </div>
         </div>
     </body>
