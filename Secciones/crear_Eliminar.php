@@ -38,6 +38,21 @@
                             </select>
                             <small class="form-text text-muted">Inserte aquí el <strong>País de Nacimiento</strong></small>
                         </div>
+                        <div class="btn-group" role="group" aria-label="Button group name">
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Enviar
+                            </button>
+                            <button
+                                type="reset"
+                                class="btn btn-primary"
+                            >
+                                Borrar
+                            </button>
+                        </div>
+                        
                     </form>
                 </div>
             </div>
@@ -92,6 +107,20 @@
                             <label for="fechaNac" class="form-label">Fecha de Nacimiento</label>
                             <input type="date" class="form-control" name="fechaNac" id="fechaNac">
                             <small class="form-text text-muted">Inserte aquí la <strong>Fecha de nacimiento</strong></small>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Button group name">
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Enviar
+                            </button>
+                            <button
+                                type="reset"
+                                class="btn btn-primary"
+                            >
+                                Borrar
+                            </button>
                         </div>
                     </form>
                 </div>
