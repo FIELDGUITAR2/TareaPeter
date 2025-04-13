@@ -1,3 +1,3 @@
 <?php include('../Templates/cabecera.php');?>
-    vista nomina
+    Vista Nomina
 <?php include('../Templates/pie.php');?>
