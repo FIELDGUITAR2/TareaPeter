@@ -1,3 +1,4 @@
+<?php
 class Empleado{
     public $nombre;
     public $centroCosto;
@@ -48,4 +49,7 @@ class Empleado{
     public function __toString(){
         return "Nombre: ".$this->nombre." Centro de Costo: ".$this->centroCosto." Cargo: ".$this->cargo." Sueldo: ".$this->sueldo." Identifiacion: ".$this->identifiacion;
     }
+
+
 }
+// Compare this snippet from Controlador/ControladorEmpleado.php:
