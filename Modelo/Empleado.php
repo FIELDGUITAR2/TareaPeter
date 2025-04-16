@@ -5,14 +5,21 @@ class Empleado{
     public $cargo;
     public $sueldo;
     public $identifiacion;
+    public $diasLaborados;
 
-    public function __construct($nombre, $centroCosto, $cargo, $sueldo, $identifiacion){
+    public function __construct($nombre, $centroCosto, $cargo, $sueldo, $identifiacion, $diasLaborados) {
         $this->nombre = $nombre;
         $this->centroCosto = $centroCosto;
         $this->cargo = $cargo;
         $this->sueldo = $sueldo;
         $this->identifiacion = $identifiacion;
+        $this->diasLaborados = $diasLaborados;
     }
+
+    public function getDiasLaborados(){
+        return $this->diasLaborados;
+    }
+
     public function getNombre(){
         return $this->nombre;
     }
@@ -28,6 +35,9 @@ class Empleado{
     }
     public function getIdentifiacion(){
         return $this->identifiacion;
+    }
+    public function setDiasLaborados($diasLaborados){
+        $this->diaslaborados = $diasLaborados;
     }
     public function setNombre($nombre){
         $this->nombre = $nombre;
@@ -46,9 +56,15 @@ class Empleado{
     public function setIdentifiacion($identifiacion){
         $this->identifiacion = $identifiacion;
     }
-    public function __toString(){
-        return "Nombre: ".$this->nombre." Centro de Costo: ".$this->centroCosto." Cargo: ".$this->cargo." Sueldo: ".$this->sueldo." Identifiacion: ".$this->identifiacion;
+    public function __toString() {
+        return "Nombre: ".$this->nombre.
+               " Centro de Costo: ".$this->centroCosto.
+               " Cargo: ".$this->cargo.
+               " Sueldo: ".$this->sueldo.
+               " Identificación: ".$this->identifiacion.
+               " Días Laborados: ".$this->diasLaborados;
     }
+    
 
 
 }
