@@ -40,6 +40,33 @@ class ControladorNomina {
 
     // Calcular total devengado, deducciones y total a pagar
     public function calcularTotales($datos) {
-        return $this->modelo->calcularTotales($datos);
+        $salario = $this->modelo->calcularSalarioSegunDias($datos['diasLaborados']);
+        $auxTransporte = $this->modelo->calcularAuxTransporte($datos['diasLaborados']);
+        $recargoNocturno = $this->modelo->calcularRecargoNocturno($datos['horasNocturnas']);
+        $horasExtrasDiurnas = $this->modelo->calcularHorasExtrasDiurnas($datos['horasExtrasDiurnas']);
+        $horasExtrasNocturnas = $this->modelo->calcularHorasExtrasNocturnas($datos['horasExtrasNocturnas']);
+        $horasDominicales = $this->modelo->calcularHorasDominicales($datos['horasDominicales']);
+        $totalDevengado = $this->modelo->calcularTotalDevengado();
+        $deducciones = $this->modelo->calcularDeducciones();
+        $totalAPagar = $this->modelo->calcularTotalAPagar();
+
+        // Retornar los resultados como un arreglo asociativo
+        return [
+            'salario' => $salario,
+            'auxTransporte' => $auxTransporte,
+            'recargoNocturno' => $recargoNocturno,
+            'horasExtrasDiurnas' => $horasExtrasDiurnas,
+            'horasExtrasNocturnas' => $horasExtrasNocturnas,
+            'horasDominicales' => $horasDominicales,
+            'totalDevengado' => $totalDevengado,
+            'deducciones' => $deducciones,
+            'totalAPagar' => $totalAPagar
+        ];
+    }
+
+    // Mostrar resultados de los cálculos
+    public function mostrarResultados($datos) {
+        $resultados = $this->calcularTotales($datos);
+        include 'Vista/vista_Resultados.php';
     }
 }
