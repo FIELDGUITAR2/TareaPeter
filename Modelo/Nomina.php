@@ -1,7 +1,7 @@
 <?php
 class Nomina {
     public $empleado; // objeto de la clase Empleado
-    public $salarioSegunDias;
+
     public $vacacionesDisfrutadas;
     public $vacacionesCompensadas;
     public $auxTransporte;
@@ -55,16 +55,14 @@ class Nomina {
 
     // Calcular salario según días laborados
     public function calcularSalarioSegunDias($diasLaborados) {
-        $salarioMinimo = 1160000; // Salario mínimo mensual en Colombia (2025, ejemplo)
         $this->diasLaborados = $diasLaborados;
-        $this->salarioSegunDias = ($salarioMinimo / 30) * $diasLaborados;
+        $this->salarioSegunDias = ($salarioMinimo2025/ 30) * $diasLaborados;
         return $this->salarioSegunDias;
     }
 
     // Calcular auxilio de transporte
     public function calcularAuxTransporte($diasLaborados) {
-        $auxTransporte = 140606; // Auxilio de transporte en Colombia (2025, ejemplo)
-        $this->auxTransporte = ($auxTransporte / 30) * $diasLaborados;
+        $this->auxTransporte = ($auxilioTransporteMensual / 30) * $diasLaborados;
         return $this->auxTransporte;
     }
 
@@ -96,10 +94,9 @@ class Nomina {
         return $this->incapacidadARL;
     }
 
-    // Calcular recargo nocturno (35% del valor de la hora)
+
     public function calcularRecargoNocturno($horasNocturnas) {
-        $salarioMinimo = 1160000; // Salario mínimo mensual
-        $valorHora = $salarioMinimo / 240; // 240 horas laborales al mes
+        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $recargo = $valorHora * 0.35; // 35% de recargo nocturno
         $this->recargoNocturno = $recargo * $horasNocturnas;
         return $this->recargoNocturno;
@@ -107,17 +104,14 @@ class Nomina {
 
     // Calcular horas extras diurnas (25% adicional)
     public function calcularHorasExtrasDiurnas($horasExtras) {
-        $salarioMinimo = 1160000; // Salario mínimo mensual
-        $valorHora = $salarioMinimo / 240; // 240 horas laborales al mes
+        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $extraDiurna = $valorHora * 1.25; // 25% adicional
         $this->extraTurno = $extraDiurna * $horasExtras;
         return $this->extraTurno;
     }
 
-    // Calcular horas extras nocturnas (75% adicional)
     public function calcularHorasExtrasNocturnas($horasExtrasNocturnas) {
-        $salarioMinimo = 1160000; // Salario mínimo mensual
-        $valorHora = $salarioMinimo / 240; // 240 horas laborales al mes
+        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $extraNocturna = $valorHora * 1.75; // 75% adicional
         $this->extraTurno = $extraNocturna * $horasExtrasNocturnas;
         return $this->extraTurno;
@@ -125,8 +119,7 @@ class Nomina {
 
     // Calcular horas dominicales y festivas (100% adicional)
     public function calcularHorasDominicales($horasDominicales) {
-        $salarioMinimo = 1160000; // Salario mínimo mensual
-        $valorHora = $salarioMinimo / 240; // 240 horas laborales al mes
+        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $recargoDominical = $valorHora * 2; // 100% adicional
         $this->horasDominicales = $recargoDominical * $horasDominicales;
         return $this->horasDominicales;
@@ -140,13 +133,13 @@ class Nomina {
 
     // Calcular deducciones (salud y pensión)
     public function calcularDeducciones() {
-        $salud = $this->totalDevengado * 0.04; // 4% para salud
-        $pension = $this->totalDevengado * 0.04; // 4% para pensión
+        $salud = $this->totalDevengado * 0.04; 
+        $pension = $this->totalDevengado * 0.04;
         $this->totalDeducciones = $salud + $pension;
         return $this->totalDeducciones;
     }
 
-    // Calcular total a pagar
+
     public function calcularTotalAPagar() {
         $this->totalAPagar = $this->totalDevengado - $this->totalDeducciones;
         return $this->totalAPagar;
