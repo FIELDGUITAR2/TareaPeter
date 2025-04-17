@@ -1,4 +1,4 @@
-<?php include('../Templates/cabecera.php');?>
+<?php include('../Templates/cabecera.php'); ?>
 <div class="container">
     <h2 class="text-center mt-4 mb-4">Listado de Nómina</h2>
     
@@ -9,8 +9,8 @@
                 <th>Cargo</th>
                 <th>Salario</th>
                 <th>Días Laborados</th>
-                <th>Salud</th>
-                <th>Pensión</th>
+                <th>Auxilio Transporte</th>
+                <th>Recargo Nocturno</th>
                 <th>Total Devengado</th>
                 <th>Total Deducciones</th>
                 <th>Total a Pagar</th>
@@ -23,8 +23,8 @@
                     <td><?= htmlspecialchars($nomina['cargo']) ?></td>
                     <td>$<?= number_format($nomina['salario'], 0, ',', '.') ?></td>
                     <td><?= $nomina['dias_laborados'] ?></td>
-                    <td>$<?= number_format($nomina['salud'], 0, ',', '.') ?></td>
-                    <td>$<?= number_format($nomina['pension'], 0, ',', '.') ?></td>
+                    <td>$<?= number_format($nomina['aux_transporte'], 0, ',', '.') ?></td>
+                    <td>$<?= number_format($nomina['recargo_nocturno'], 0, ',', '.') ?></td>
                     <td>$<?= number_format($nomina['total_devengado'], 0, ',', '.') ?></td>
                     <td>$<?= number_format($nomina['total_deducciones'], 0, ',', '.') ?></td>
                     <td><strong>$<?= number_format($nomina['total_pagar'], 0, ',', '.') ?></strong></td>
@@ -34,4 +34,4 @@
     </table>
 </div>
 
-<?php include('../Templates/pie.php');?>
+<?php include('../Templates/pie.php'); ?>
