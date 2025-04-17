@@ -1,10 +1,10 @@
 <?php
-    include('../Templates/cabecera.php');
+    include('Templates/cabecera.php');
 ?>
 <div class="container">
     <div class="row">
         <!-- Primera columna -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-3">
             <div class="card">
                 <div class="card-header">Datos Tarjeta ID</div>
                 <div class="card-body">
@@ -59,7 +59,7 @@
         </div>
 
         <!-- Segunda columna -->
-        <div class="col-md-4">
+        <div class="col-md-4 mt-3">
             <div class="card">
                 <div class="card-header">Datos Personales</div>
                 <div class="card-body">
@@ -135,5 +135,5 @@
 </div>
 
 <?php
-    include('../Templates/pie.php');
+    include('Templates/pie.php');
 ?>

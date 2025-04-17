@@ -25,7 +25,7 @@
 
                 </div>
                 <div class="col-md-4 mt-5">
-                    <form action="principal.php" method="post">
+                    <form action="Vista/principal.php" method="post">
                         <div class="card">
                             <div class="card-header">Inicio de sesion</div>
                             <div class="card-body">
