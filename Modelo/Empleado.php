@@ -5,7 +5,7 @@ class Empleado{
     public $cargo;
     public $sueldo;
     public $identifiacion;
-    public $salarioSegunDias; // Nueva propiedad
+    public $diasLaborados; // Nueva propiedad
 
     public function __construct($nombre, $centroCosto, $cargo, $sueldo, $identifiacion, $salarioSegunDias = 0){
         $this->nombre = $nombre;
@@ -13,16 +13,16 @@ class Empleado{
         $this->cargo = $cargo;
         $this->sueldo = $sueldo;
         $this->identifiacion = $identifiacion;
-        $this->salarioSegunDias = $salarioSegunDias; // Inicializar
+        $this->diasLaborados = $diasLaborados; // Inicializar
     }
-
+    
     // Getters
     public function getNombre(){ return $this->nombre; }
     public function getCentroCosto(){ return $this->centroCosto; }
     public function getCargo(){ return $this->cargo; }
     public function getSueldo(){ return $this->sueldo; }
     public function getIdentifiacion(){ return $this->identifiacion; }
-    public function getSalarioSegunDias(){ return $this->salarioSegunDias; } // Nuevo getter
+    public function getDiasLaborados(){ return $this->diasLaborados; } // Nuevo getter
 
     // Setters
     public function setNombre($nombre){ $this->nombre = $nombre; }
@@ -30,7 +30,7 @@ class Empleado{
     public function setCargo($cargo){ $this->cargo = $cargo; }
     public function setSueldo($sueldo){ $this->sueldo = $sueldo; }
     public function setIdentifiacion($identifiacion){ $this->identifiacion = $identifiacion; }
-    public function setSalarioSegunDias($salarioSegunDias){ $this->salarioSegunDias = $salarioSegunDias; } // Nuevo setter
+    public function setSalarioSegunDias($diasLaborados){ $this->diaslaborados = $diasLaborados; } // Nuevo setter
 
     public function __toString(){
         return "Nombre: ".$this->nombre.
@@ -38,7 +38,7 @@ class Empleado{
                " Cargo: ".$this->cargo.
                " Sueldo: ".$this->sueldo.
                " Identifiacion: ".$this->identifiacion.
-               " Salario Según Días: ".$this->salarioSegunDias;
+               " Dias laborados: ".$this->diasLaborados;
     }
 }
 

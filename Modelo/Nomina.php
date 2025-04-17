@@ -62,7 +62,11 @@ class Nomina {
 
     // Calcular auxilio de transporte
     public function calcularAuxTransporte($diasLaborados) {
-        $this->auxTransporte = ($auxilioTransporteMensual / 30) * $diasLaborados;
+        if ($this->empleado->sueldo <= 2 * $this->salarioMinimo2025) {
+            $this->auxTransporte = ($this->auxilioTransporteMensual / 30) * $diasLaborados;
+        } else {
+            $this->auxTransporte = 0;
+        }
         return $this->auxTransporte;
     }
 
@@ -119,8 +123,8 @@ class Nomina {
 
     // Calcular horas dominicales y festivas (100% adicional)
     public function calcularHorasDominicales($horasDominicales) {
-        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
-        $recargoDominical = $valorHora * 2; // 100% adicional
+        $valorHora = $salarioMinimo2025 / 240;
+        $recargoDominical = $valorHora * 2;
         $this->horasDominicales = $recargoDominical * $horasDominicales;
         return $this->horasDominicales;
     }
@@ -131,14 +135,36 @@ class Nomina {
         return $this->totalDevengado;
     }
 
-    // Calcular deducciones (salud y pensión)
-    public function calcularDeducciones() {
-        $salud = $this->totalDevengado * 0.04; 
-        $pension = $this->totalDevengado * 0.04;
-        $this->totalDeducciones = $salud + $pension;
-        return $this->totalDeducciones;
+    // Calcular deducciones salud
+    public function calcularDeduccionesSalud() {
+        $this->salud = ($this->empleado->sueldo+ $this->vacacionesCompensadas + $this->extraTurno )* 0.04;
+        return $this->salud;
     }
-
+    
+    // Calcular deduccionesd pension 
+    public function calcularDeduccionesPension() {
+        $this->pension = ($this->empleado->sueldo+ $this->vacacionesCompensadas + $this->extraTurno )* 0.04;
+        return $this->pension;
+    }
+    //calcular fondos solidarios
+    public function calcularFondoSolidaridadPensional() {
+        if ($this->empleado->sueldo > 4000000) {
+            $this->fondoSolidaridad = $this->empleado->sueldo * 0.01;  
+        } else {
+            $this->fondoSolidaridad = 0;
+        }
+        return $this->fondoSolidaridad;  
+    }
+    //calcular total deducciones
+    public function calcularTotalDeducciones(){
+        $this->totalDeducciones = 
+            $this->salud + 
+            $this->pension + 
+            $this->fondoSolidaridad + 
+            $this->anticiposNomina + 
+            $this->pagoVacaciones;
+    }
+    
 
     public function calcularTotalAPagar() {
         $this->totalAPagar = $this->totalDevengado - $this->totalDeducciones;
@@ -178,5 +204,4 @@ class Nomina {
         $query->execute();
     }
 
-    // Otros métodos como agregarNomina, actualizarNomina, eliminarNomina, etc.
 }
