@@ -36,33 +36,32 @@ class Nomina {
     public $horasExtras;
     public $horasExtrasNocturnas;
     public $horasExtrasDiurnas;
-
-  
-
-
+    public $salarioSegunDias;
     private $db;
 
-    public $salarioMinimo2025 = 1423500; 
+    public $salarioMinimo2025; 
     public $auxilioTransporteMensual = 200000; 
    
-
-
     public function __construct($empleado) {
         $this->empleado = $empleado;
-        // Configuración de la conexión a la base de datos
+        try {
         $this->db = new PDO('mysql:host=localhost;dbname=tu_base_de_datos', 'usuario', 'contraseña');
+$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Error en la conexión a la base de datos: " . $e->getMessage());
+        }
     }
 
     // Calcular salario según días laborados
     public function calcularSalarioSegunDias($diasLaborados) {
         $this->diasLaborados = $diasLaborados;
-        $this->salarioSegunDias = ($salarioMinimo2025/ 30) * $diasLaborados;
+        $this->salarioSegunDias = ($this->salarioMinimo2025 / 30) * $diasLaborados;
         return $this->salarioSegunDias;
     }
 
     // Calcular auxilio de transporte
     public function calcularAuxTransporte($diasLaborados) {
-        $this->auxTransporte = ($auxilioTransporteMensual / 30) * $diasLaborados;
+        $this->auxTransporte = ($this->auxilioTransporteMensual / 30) * $diasLaborados;
         return $this->auxTransporte;
     }
 
@@ -96,6 +95,7 @@ class Nomina {
 
 
     public function calcularRecargoNocturno($horasNocturnas) {
+        $salarioMinimo2025 = 1423500; 
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $recargo = $valorHora * 0.35; // 35% de recargo nocturno
         $this->recargoNocturno = $recargo * $horasNocturnas;
@@ -104,6 +104,7 @@ class Nomina {
 
     // Calcular horas extras diurnas (25% adicional)
     public function calcularHorasExtrasDiurnas($horasExtras) {
+        $salarioMinimo2025 = 1423500;
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $extraDiurna = $valorHora * 1.25; // 25% adicional
         $this->extraTurno = $extraDiurna * $horasExtras;
@@ -111,6 +112,7 @@ class Nomina {
     }
 
     public function calcularHorasExtrasNocturnas($horasExtrasNocturnas) {
+        $salarioMinimo2025 = 1423500;
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $extraNocturna = $valorHora * 1.75; // 75% adicional
         $this->extraTurno = $extraNocturna * $horasExtrasNocturnas;
@@ -119,6 +121,7 @@ class Nomina {
 
     // Calcular horas dominicales y festivas (100% adicional)
     public function calcularHorasDominicales($horasDominicales) {
+        $salarioMinimo2025 = 1423500;
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $recargoDominical = $valorHora * 2; // 100% adicional
         $this->horasDominicales = $recargoDominical * $horasDominicales;
@@ -139,7 +142,6 @@ class Nomina {
         return $this->totalDeducciones;
     }
 
-
     public function calcularTotalAPagar() {
         $this->totalAPagar = $this->totalDevengado - $this->totalDeducciones;
         return $this->totalAPagar;
@@ -147,36 +149,50 @@ class Nomina {
 
     // Obtener todos los registros de nómina
     public function obtenerNominas() {
+try {
         $query = $this->db->prepare("SELECT * FROM nominas");
         $query->execute();
         return $query->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+            die("Error al obtener las nóminas: " . $e->getMessage());
+        }
     }
 
     // Agregar un nuevo registro de nómina
     public function agregarNomina($datos) {
+try {
         $query = $this->db->prepare("INSERT INTO nominas (campo1, campo2, campo3) VALUES (:valor1, :valor2, :valor3)");
         $query->bindParam(':valor1', $datos['campo1']);
         $query->bindParam(':valor2', $datos['campo2']);
         $query->bindParam(':valor3', $datos['campo3']);
         $query->execute();
+} catch (PDOException $e) {
+            die("Error al agregar la nómina: " . $e->getMessage());
+        }
     }
 
     // Actualizar un registro de nómina existente
     public function actualizarNomina($id, $datosActualizados) {
+try {
         $query = $this->db->prepare("UPDATE nominas SET campo1 = :valor1, campo2 = :valor2, campo3 = :valor3 WHERE id = :id");
         $query->bindParam(':valor1', $datosActualizados['campo1']);
         $query->bindParam(':valor2', $datosActualizados['campo2']);
         $query->bindParam(':valor3', $datosActualizados['campo3']);
         $query->bindParam(':id', $id);
         $query->execute();
+} catch (PDOException $e) {
+            die("Error al actualizar la nómina: " . $e->getMessage());
+        }
     }
 
     // Eliminar un registro de nómina
     public function eliminarNomina($id) {
+try {
         $query = $this->db->prepare("DELETE FROM nominas WHERE id = :id");
         $query->bindParam(':id', $id);
         $query->execute();
+} catch (PDOException $e) {
+            die("Error al eliminar la nómina: " . $e->getMessage());
+        }
     }
-
-    // Otros métodos como agregarNomina, actualizarNomina, eliminarNomina, etc.
 }
