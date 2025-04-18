@@ -5,8 +5,8 @@
 <div class="container">
     <div class="row">
 
-        <form action="fEditar md-5 mt-5">
-            <div class="card">
+        <form action="fEditar md-5">
+            <div class="card mt-5">
                 <div class="card-header">Editar Empleado</div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -32,8 +32,15 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
 
+            <button type="submit" class="btn btn-primary">
+                EnviarCambios
+            </button>
+            <button type="reset" class="btn btn-primary">
+                Borrar
+            </button>
         </form>
 
 
