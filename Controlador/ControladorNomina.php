@@ -1,13 +1,16 @@
 <?php
 require_once 'Modelo/Nomina.php';
+require_once 'Modelo/procesoNomina.php';
 
 class ControladorNomina {
 
     private $modelo;
+    private $procesoNomina;
 
     public function __construct($empleado) {
-        // Pasar el objeto empleado al modelo
+        // Pasar el objeto empleado al modelo y al proceso de nómina
         $this->modelo = new Nomina($empleado);
+        $this->procesoNomina = new ProcesoNomina($empleado);
     }
 
     // Mostrar todos los registros de nómina
@@ -40,7 +43,7 @@ class ControladorNomina {
         }
     }
 
-    // Editar nómina (si implementas edición)
+    // Editar nómina
     public function editarNomina($id, $datosActualizados) {
         try {
             if (isset($id, $datosActualizados['campo1'], $datosActualizados['campo2'], $datosActualizados['campo3'])) {
@@ -68,20 +71,25 @@ class ControladorNomina {
         }
     }
 
-    // Calcular total devengado, deducciones y total a pagar
-    public function calcularTotales($datos) {
+    // Calcular conceptos adicionales de nómina
+    public function calcularConceptos($datos) {
         try {
             // Validar datos necesarios para los cálculos
             if (isset($datos['diasLaborados'], $datos['horasNocturnas'], $datos['horasExtrasDiurnas'], $datos['horasExtrasNocturnas'], $datos['horasDominicales'])) {
-                $salario = $this->modelo->calcularSalarioSegunDias($datos['diasLaborados']);
-                $auxTransporte = $this->modelo->calcularAuxTransporte($datos['diasLaborados']);
-                $recargoNocturno = $this->modelo->calcularRecargoNocturno($datos['horasNocturnas']);
-                $horasExtrasDiurnas = $this->modelo->calcularHorasExtrasDiurnas($datos['horasExtrasDiurnas']);
-                $horasExtrasNocturnas = $this->modelo->calcularHorasExtrasNocturnas($datos['horasExtrasNocturnas']);
-                $horasDominicales = $this->modelo->calcularHorasDominicales($datos['horasDominicales']);
-                $totalDevengado = $this->modelo->calcularTotalDevengado();
-                $deducciones = $this->modelo->calcularDeducciones();
-                $totalAPagar = $this->modelo->calcularTotalAPagar();
+                $salario = $this->procesoNomina->calcularSalarioSegunDias($datos['diasLaborados']);
+                $auxTransporte = $this->procesoNomina->calcularAuxTransporte($datos['diasLaborados']);
+                $recargoNocturno = $this->procesoNomina->calcularRecargoNocturno($datos['horasNocturnas']);
+                $horasExtrasDiurnas = $this->procesoNomina->calcularHorasExtrasDiurnas($datos['horasExtrasDiurnas']);
+                $horasExtrasNocturnas = $this->procesoNomina->calcularHorasExtrasNocturnas($datos['horasExtrasNocturnas']);
+                $horasDominicales = $this->procesoNomina->calcularHorasDominicales($datos['horasDominicales']);
+                $vacacionesDisfrutadas = $this->procesoNomina->calcularVacacionesDisfrutadas();
+                $vacacionesCompensadas = $this->procesoNomina->calcularVacacionesCompensadas($datos['vacacionesCompensadas']);
+                $incapacidadEmpleador = $this->procesoNomina->calcularIncapacidadEmpleador($datos['incapacidadEmpleador']);
+                $incapacidadEPS = $this->procesoNomina->calcularIncapacidadEPS($datos['incapacidadEPS']);
+                $incapacidadARL = $this->procesoNomina->calcularIncapacidadARL($datos['incapacidadARL']);
+                $totalDevengado = $this->procesoNomina->calcularTotalDevengado();
+                $deducciones = $this->procesoNomina->calcularDeducciones();
+                $totalAPagar = $this->procesoNomina->calcularTotalAPagar();
 
                 // Retornar los resultados como un arreglo asociativo
                 return [
@@ -91,6 +99,11 @@ class ControladorNomina {
                     'horasExtrasDiurnas' => $horasExtrasDiurnas,
                     'horasExtrasNocturnas' => $horasExtrasNocturnas,
                     'horasDominicales' => $horasDominicales,
+                    'vacacionesDisfrutadas' => $vacacionesDisfrutadas,
+                    'vacacionesCompensadas' => $vacacionesCompensadas,
+                    'incapacidadEmpleador' => $incapacidadEmpleador,
+                    'incapacidadEPS' => $incapacidadEPS,
+                    'incapacidadARL' => $incapacidadARL,
                     'totalDevengado' => $totalDevengado,
                     'deducciones' => $deducciones,
                     'totalAPagar' => $totalAPagar
@@ -99,14 +112,14 @@ class ControladorNomina {
                 throw new Exception("Datos incompletos para realizar los cálculos.");
             }
         } catch (Exception $e) {
-            die("Error al calcular los totales: " . $e->getMessage());
+            die("Error al calcular los conceptos: " . $e->getMessage());
         }
     }
 
     // Mostrar resultados de los cálculos
     public function mostrarResultados($datos) {
         try {
-            $resultados = $this->calcularTotales($datos);
+            $resultados = $this->calcularConceptos($datos);
             include 'Vista/vista_Resultados.php';
         } catch (Exception $e) {
             die("Error al mostrar los resultados: " . $e->getMessage());
