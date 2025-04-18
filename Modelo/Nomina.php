@@ -1,80 +1,99 @@
 <?php
 class Nomina {
-    public $empleado; // Objeto de la clase Empleado
+    private $empleado;
+    private $devengado;
+    private $deduccion;
+    private $totalAPagar;
 
-     public $recargoNocturno;
-
-    public $horasDominicales;
-    public $salud;
-    public $pension;
-    public $totalDeducciones;
-    public $totalAPagar;
-    public $diasLaborados;
-    public $horasNocturnas;
-    public $horasExtras;
-    public $horasExtrasNocturnas;
-    public $horasExtrasDiurnas;
-    public $salarioSegunDias;
-
-    private $db;
-     
-   
-    public function __construct($empleado) {
+    public function __construct(
+        $empleado,
+        $diasLaborados,
+        $salarioSegunDias,
+        $vacacionesDisfrutadas,
+        $vacacionesCompensadas,
+        $auxilioTransporte,
+        $auxilioIncapacidadEmpleador,
+        $pagoIncapacidadEPS,
+        $pagoIncapacidadARL,
+        $extraTurno,
+        $recargoNocturno,
+        $horasDominicales,
+        $auxAlimentacionNoPrestacional
+    ) {
         $this->empleado = $empleado;
-        try {
-        $this->db = new PDO('mysql:host=localhost;dbname=tu_base_de_datos', 'usuario', 'contraseña');
-$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("Error en la conexión a la base de datos: " . $e->getMessage());
-        }
+        $this->devengado = new procesoDevengados(
+            $empleado,
+            $diasLaborados,
+            $salarioSegunDias,
+            $vacacionesDisfrutadas,
+            $vacacionesCompensadas,
+            $auxilioTransporte,
+            $auxilioIncapacidadEmpleador,
+            $pagoIncapacidadEPS,
+            $pagoIncapacidadARL,
+            $extraTurno,
+            $recargoNocturno,
+            $horasDominicales,
+            $auxAlimentacionNoPrestacional
+        );
     }
 
-    // Obtener todos los registros de nómina
-    public function obtenerNominas() {
-try {
-        $query = $this->db->prepare("SELECT * FROM nominas");
-        $query->execute();
-        return $query->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-            die("Error al obtener las nóminas: " . $e->getMessage());
-        }
+    public function procesarDevengados($datosHorasExtras) {
+        $this->devengado->calcularSalarioPorEmpleado();
+        $this->devengado->calcularAuxTransporte();
+        $this->devengado->calcularRecargoNocturno($datosHorasExtras['horasNocturnas']);
+        $this->devengado->calcularHorasExtrasDiurnas($datosHorasExtras['horasExtrasDiurnas']);
+        $this->devengado->calcularHorasExtrasNocturnas($datosHorasExtras['horasExtrasNocturnas']);
+        $this->devengado->calcularHorasDominicales($datosHorasExtras['horasDominicales']);
+        $this->devengado->calcularVacacionesDisfrutadas();
+        $this->devengado->calcularVacacionesCompensadas($datosHorasExtras['vacacionesCompensadas']);
+        $this->devengado->calcularIncapacidadEmpleador($datosHorasExtras['incapacidadEmpleador']);
+        $this->devengado->calcularIncapacidadEPS($datosHorasExtras['incapacidadEPS']);
+        $this->devengado->calcularIncapacidadARL($datosHorasExtras['incapacidadARL']);
     }
 
-    // Agregar un nuevo registro de nómina
-    public function agregarNomina($datos) {
-try {
-        $query = $this->db->prepare("INSERT INTO nominas (campo1, campo2, campo3) VALUES (:valor1, :valor2, :valor3)");
-        $query->bindParam(':valor1', $datos['campo1']);
-        $query->bindParam(':valor2', $datos['campo2']);
-        $query->bindParam(':valor3', $datos['campo3']);
-        $query->execute();
-} catch (PDOException $e) {
-            die("Error al agregar la nómina: " . $e->getMessage());
-        }
+    public function procesarDeducciones($salarioBase, $anticiposNomina, $pagoVacaciones, $diasVacaciones, $fondoSolidaridad = 0, $prestamo = []) {
+        // Crear instancia de procesoDeducciones
+        $this->deduccion = new procesoDeducciones(
+            0, // Salud (se calculará más adelante)
+            0, // Pensión (se calculará más adelante)
+            $fondoSolidaridad,
+            $anticiposNomina,
+            $pagoVacaciones,
+            $prestamo['monto'] ?? 0,
+            $prestamo['cuotas'] ?? 0,
+            $prestamo['cuotasPagadas'] ?? 0,
+            $prestamo['valorCuota'] ?? 0,
+            $salarioBase
+        );
+
+        // Calcular deducciones específicas
+        $salud = $this->deduccion->calcularSalud();
+        $pension = $this->deduccion->calcularPension();
+        $fondoSolidaridad = $this->deduccion->calcularFondoSolidaridad();
+        $vacaciones = $this->deduccion->calcularPagoVacaciones($diasVacaciones);
+
+        // Sumar todas las deducciones
+        $this->deduccion->salud = $salud['empleado']; // Solo el aporte del empleado
+        $this->deduccion->pension = $pension['empleado']; // Solo el aporte del empleado
+        $this->deduccion->fondoSolidaridad = $fondoSolidaridad;
+        $this->deduccion->pagoVacaciones = $vacaciones;
+
+        return $this->deduccion->getTotalDeducciones();
     }
 
-    // Actualizar un registro de nómina existente
-    public function actualizarNomina($id, $datosActualizados) {
-try {
-        $query = $this->db->prepare("UPDATE nominas SET campo1 = :valor1, campo2 = :valor2, campo3 = :valor3 WHERE id = :id");
-        $query->bindParam(':valor1', $datosActualizados['campo1']);
-        $query->bindParam(':valor2', $datosActualizados['campo2']);
-        $query->bindParam(':valor3', $datosActualizados['campo3']);
-        $query->bindParam(':id', $id);
-        $query->execute();
-} catch (PDOException $e) {
-            die("Error al actualizar la nómina: " . $e->getMessage());
-        }
+    public function calcularTotalAPagar() {
+        $this->totalAPagar = $this->devengado->getTotalDevengado() - $this->deduccion->getTotalDeducciones();
+        return $this->totalAPagar;
     }
 
-    // Eliminar un registro de nómina
-    public function eliminarNomina($id) {
-try {
-        $query = $this->db->prepare("DELETE FROM nominas WHERE id = :id");
-        $query->bindParam(':id', $id);
-        $query->execute();
-} catch (PDOException $e) {
-            die("Error al eliminar la nómina: " . $e->getMessage());
-        }
+    public function getResumenNomina() {
+        return [
+            'empleado' => $this->empleado,
+            'devengado' => $this->devengado->getTotalDevengado(),
+            'deduccion' => $this->deduccion->getTotalDeducciones(),
+            'totalAPagar' => $this->totalAPagar
+        ];
     }
 }
+?>
