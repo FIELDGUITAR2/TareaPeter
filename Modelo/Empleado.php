@@ -7,6 +7,7 @@ class Empleado{
     private $sueldo;
     private $identifiacion;
     private $salarioSegunDias; // Nueva propiedad
+    private $diasLaborados;
 
 
     public function __construct()
@@ -42,6 +43,21 @@ class Empleado{
                " Sueldo: ".$this->sueldo.
                " Identifiacion: ".$this->identifiacion.
                " Dias laborados: ".$this->diasLaborados;
+    }
+
+    public function InsetarEmpleado()
+    {
+        require_once '../Configuraciones/bd.php';
+
+        $db = new Database();
+
+        $resultado = $db->conexion->query("Insert into ");
+
+        while ($fila = $resultado->fetch_assoc()) {
+            echo $fila['nombre'] . "<br>";
+        }
+
+        $db->cerrarConexion();
     }
 }
 
