@@ -29,101 +29,6 @@ $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
     }
 
-    // Calcular salario según días laborados
-    public function calcularSalarioSegunDias($diasLaborados) {
-        $this->diasLaborados = $diasLaborados;
-        $this->salarioSegunDias = ($this->salarioMinimo2025 / 30) * $diasLaborados;
-        return $this->salarioSegunDias;
-    }
-
-    // Calcular auxilio de transporte
-    public function calcularAuxTransporte($diasLaborados) {
-        $this->auxTransporte = ($this->auxilioTransporteMensual / 30) * $diasLaborados;
-        return $this->auxTransporte;
-    }
-
-    public function calcularSalarioPorEmpleado() {
-        $this->salarioSegunDias = ($this->empleado->sueldo / 30) * $this->empleado->diasLaborados;
-        return $this->salarioSegunDias;
-    }
-    
-    public function calcularVacacionesDisfrutadas() {
-        $diasNoLaborados = 30 - $this->empleado->diasLaborados;
-        $this->vacacionesDisfrutadas = ($this->empleado->sueldo / 30) * $diasNoLaborados;
-        return $this->vacacionesDisfrutadas;
-    }
-    public function calcularVacacionesCompensadas($vacacionesCompensadas) {
-        $this->vacacionesCompensadas = $vacacionesCompensadas;
-        return $this->vacacionesCompensadas;
-    }
-
-    public function calcularIncapacidadEmpleador($incapacidadEmpleador) {
-        $this->incapacidadEmpleador = $incapacidadEmpleador;
-        return $this->incapacidadEmpleador;
-    }
-    public function calcularIncapacidadEPS($incapacidadEPS) {
-        $this->incapacidadEPS = $incapacidadEPS;
-        return $this->incapacidadEPS;
-    }
-    public function calcularIncapacidadARL($incapacidadARL) {
-        $this->incapacidadARL = $incapacidadARL;
-        return $this->incapacidadARL;
-    }
-
-
-    public function calcularRecargoNocturno($horasNocturnas) {
-        $salarioMinimo2025 = 1423500; 
-        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
-        $recargo = $valorHora * 0.35; // 35% de recargo nocturno
-        $this->recargoNocturno = $recargo * $horasNocturnas;
-        return $this->recargoNocturno;
-    }
-
-    // Calcular horas extras diurnas (25% adicional)
-    public function calcularHorasExtrasDiurnas($horasExtras) {
-        $salarioMinimo2025 = 1423500;
-        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
-        $extraDiurna = $valorHora * 1.25; // 25% adicional
-        $this->extraTurno = $extraDiurna * $horasExtras;
-        return $this->extraTurno;
-    }
-
-    public function calcularHorasExtrasNocturnas($horasExtrasNocturnas) {
-        $salarioMinimo2025 = 1423500;
-        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
-        $extraNocturna = $valorHora * 1.75; // 75% adicional
-        $this->extraTurno = $extraNocturna * $horasExtrasNocturnas;
-        return $this->extraTurno;
-    }
-
-    // Calcular horas dominicales y festivas (100% adicional)
-    public function calcularHorasDominicales($horasDominicales) {
-        $salarioMinimo2025 = 1423500;
-        $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
-        $recargoDominical = $valorHora * 2; // 100% adicional
-        $this->horasDominicales = $recargoDominical * $horasDominicales;
-        return $this->horasDominicales;
-    }
-
-    // Calcular total devengado
-    public function calcularTotalDevengado() {
-        $this->totalDevengado = $this->salarioSegunDias + $this->auxTransporte + $this->recargoNocturno + $this->extraTurno + $this->horasDominicales;
-        return $this->totalDevengado;
-    }
-
-    // Calcular deducciones (salud y pensión)
-    public function calcularDeducciones() {
-        $salud = $this->totalDevengado * 0.04; 
-        $pension = $this->totalDevengado * 0.04;
-        $this->totalDeducciones = $salud + $pension;
-        return $this->totalDeducciones;
-    }
-
-    public function calcularTotalAPagar() {
-        $this->totalAPagar = $this->totalDevengado - $this->totalDeducciones;
-        return $this->totalAPagar;
-    }
-
     // Obtener todos los registros de nómina
     public function obtenerNominas() {
 try {
@@ -172,8 +77,4 @@ try {
             die("Error al eliminar la nómina: " . $e->getMessage());
         }
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 2ad424f40e1f454c3e154de748ef1db93ba89b49
 }
