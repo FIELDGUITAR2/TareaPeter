@@ -8,7 +8,7 @@ class Empleado{
     private $identifiacion;
     private $salarioSegunDias; // Nueva propiedad
     private $diasLaborados;
-    private $fecha_exp;
+    private $fecha_Exp;
     private $ciudad_Exp;
 
 
@@ -36,7 +36,7 @@ class Empleado{
 
     // Setters
     public function setCiudad_Exp($ciudad_Exp){ $this->$ciudad_Exp = $ciudad_Exp; }
-    public function setFecha_Exp($fecha_Exp){ $this->fecha_Exp = $fecha_Exp; }
+    public function setFecha_Exp($fecha_Exp){ $this->$fecha_Exp = $fecha_Exp; }
     public function setNombre($nombre){ $this->nombre = $nombre; }
     public function setCentroCosto($centroCosto){ $this->centroCosto = $centroCosto; }
     public function setCargo($cargo){ $this->cargo = $cargo; }
@@ -61,10 +61,13 @@ class Empleado{
         $instruccion = "Insert into Identificacion(ID_Cedula,ID_Tipo,Fecha_Exp,Ciudad_Exp) values (" . $identificacion . "," . $fecha_Exp . "," . $ciudad_Exp . ";";
         $resultado = $db->conexion->query($instruccion);
 
-        while ($fila = $resultado->fetch_assoc()) {
-            echo $fila['nombre'] . "<br>";//falta esta parte
-        }
+        /*while ($fila = $resultado->fetch_assoc()) {
+            echo '<td>';
+            echo $fila['nombre'];//falta esta parte
+            echo $fila[]
 
+            echo '</td>';
+        }*/
         $db->cerrarConexion();
     }
 }
