@@ -58,7 +58,7 @@ class Empleado{
         require_once '../Configuraciones/bd.php';
 
         $db = new Database();
-        $instruccion = "Insert into Identificacion(ID_Cedula,ID_Tipo,Fecha_Exp,Ciudad_Exp) values (" . $identificacion . "," . $fecha_Exp . "," . $ciudad_Exp . ";";
+        $instruccion = "INSERT INTO Identificacion(ID_Cedula,ID_Tipo,Fecha_Exp,Ciudad_Exp) VALUES ($identificacion,$fecha_Exp,$ciudad_Exp);";
         $resultado = $db->conexion->query($instruccion);
 
         /*while ($fila = $resultado->fetch_assoc()) {
@@ -70,6 +70,53 @@ class Empleado{
         }*/
         $db->cerrarConexion();
     }
+    public function EliminarEmpleado($id)
+{
+    require_once '../Configuraciones/bd.php';
+
+    $db = new Database();
+    $conn = $db->conexion;
+
+    // Validar que el ID sea numérico
+    if (!is_numeric($id)) {
+        echo "ID inválido.";
+        return;
+    }
+
+    // Iniciar transacción
+    $conn->begin_transaction();
+
+    try {
+        // Eliminar de Identificacion
+        $stmt3 = $conn->prepare("DELETE FROM Identificacion WHERE ID_Cedula = ?");
+        $stmt3->bind_param("i", $id);
+        $stmt3->execute();
+        $stmt3->close();
+
+        // Eliminar de Persona
+        $stmt2 = $conn->prepare("DELETE FROM Persona WHERE ID_Cedula = ?");
+        $stmt2->bind_param("i", $id);
+        $stmt2->execute();
+        $stmt2->close();
+
+        // Eliminar de Empleado
+        $stmt1 = $conn->prepare("DELETE FROM Empleado WHERE ID_Persona = ?");
+        $stmt1->bind_param("i", $id);
+        $stmt1->execute();
+        $stmt1->close();
+
+        // Confirmar transacción
+        $conn->commit();
+        echo "Registro eliminado correctamente.";
+    } catch (Exception $e) {
+        // Revertir cambios si hay error
+        $conn->rollback();
+        echo "Error al eliminar el registro: " . $e->getMessage();
+    }
+
+    $db->cerrarConexion();
+}
+
 }
 
 ?>
