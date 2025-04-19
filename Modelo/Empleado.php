@@ -43,5 +43,3 @@ class Empleado{
 }
 
 
-
-// Compare this snippet from Controlador/ControladorEmpleado.php:

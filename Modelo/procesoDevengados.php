@@ -39,6 +39,11 @@ class procesoDevengados {
         $this->horasDominicales = $horasDominicales;
         $this->auxAlimentacionNoPrestacional = $auxAlimentacionNoPrestacional;
     }
+    
+    public function setEmpleado($empleado) {
+        $this->empleado = $empleado;
+    }
+
 
     // Aquí puedes agregar getters para cada atributo si los necesitas
     public function getTotalDevengado() {
@@ -46,6 +51,13 @@ class procesoDevengados {
                $this->auxilioTransporte + $this->auxilioIncapacidadEmpleador + $this->pagoIncapacidadEPS +
                $this->pagoIncapacidadARL + $this->extraTurno + $this->recargoNocturno +
                $this->horasDominicales + $this->auxAlimentacionNoPrestacional;
+    }
+
+    public function calcularTotalDevengado() {
+        // Example calculation logic (adjust as needed)
+        return $this->salarioSegunDias + $this->vacacionesDisfrutadas + $this->vacacionesCompensadas +
+               $this->auxilioIncapacidadEmpleador + $this->pagoIncapacidadEPS + $this->pagoIncapacidadARL +
+               $this->extraTurno + $this->recargoNocturno + $this->horasDominicales + $this->auxAlimentacionNoPrestacional;
     }
 
     public function calcularSalarioPorEmpleado() {

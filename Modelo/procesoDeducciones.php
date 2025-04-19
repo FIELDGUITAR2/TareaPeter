@@ -33,6 +33,22 @@ class procesoDeducciones {
                ($this->cuotaPagada * $this->valorCuota);
     }
 
+    public function setSalud($salud) {
+        $this->salud = $salud;
+    }
+    
+    public function setPension($pension) {
+        $this->pension = $pension;
+    }
+    
+    public function setFondoSolidaridad($fondoSolidaridad) {
+        $this->fondoSolidaridad = $fondoSolidaridad;
+    }
+    
+    public function setPagoVacaciones($pagoVacaciones) {
+        $this->pagoVacaciones = $pagoVacaciones;
+    }
+
     // Calcular aporte a salud
     public function calcularSalud() {
         $aporteEmpleado = $this->salarioBase * 0.04; // 4% del empleado
