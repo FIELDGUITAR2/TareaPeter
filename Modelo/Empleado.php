@@ -8,6 +8,8 @@ class Empleado{
     private $identifiacion;
     private $salarioSegunDias; // Nueva propiedad
     private $diasLaborados;
+    private $fecha_exp;
+    private $ciudad_Exp;
 
 
     public function __construct()
@@ -18,9 +20,13 @@ class Empleado{
         $sueldo = '';
         $identifiacion = 0;
         $salarioSegunDias = 0;
+        $fecha_exp = '';
+        $ciudad_Exp = '';
     }
     
     // Getters
+    public function getCiudad_Exp(){ return $this->ciudad_Exp; }
+    public function getFecha_Exp(){ return $this->fecha_Exp; }
     public function getNombre(){ return $this->nombre; }
     public function getCentroCosto(){ return $this->centroCosto; }
     public function getCargo(){ return $this->cargo; }
@@ -29,6 +35,8 @@ class Empleado{
     public function getDiasLaborados(){ return $this->diasLaborados; } // Nuevo getter
 
     // Setters
+    public function setCiudad_Exp($ciudad_Exp){ $this->$ciudad_Exp = $ciudad_Exp; }
+    public function setFecha_Exp($fecha_Exp){ $this->fecha_Exp = $fecha_Exp; }
     public function setNombre($nombre){ $this->nombre = $nombre; }
     public function setCentroCosto($centroCosto){ $this->centroCosto = $centroCosto; }
     public function setCargo($cargo){ $this->cargo = $cargo; }
@@ -50,11 +58,11 @@ class Empleado{
         require_once '../Configuraciones/bd.php';
 
         $db = new Database();
-
-        $resultado = $db->conexion->query("Insert into ");
+        $instruccion = "Insert into Identificacion(ID_Cedula,ID_Tipo,Fecha_Exp,Ciudad_Exp) values (" . $identificacion . "," . $fecha_Exp . "," . $ciudad_Exp . ";";
+        $resultado = $db->conexion->query($instruccion);
 
         while ($fila = $resultado->fetch_assoc()) {
-            echo $fila['nombre'] . "<br>";
+            echo $fila['nombre'] . "<br>";//falta esta parte
         }
 
         $db->cerrarConexion();

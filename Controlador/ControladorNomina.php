@@ -8,12 +8,10 @@ class ControladorNomina {
     private $procesoNomina;
 
     public function __construct($empleado) {
-        // Pasar el objeto empleado al modelo y al proceso de nómina
         $this->modelo = new Nomina($empleado);
         $this->procesoNomina = new ProcesoNomina($empleado);
     }
 
-    // Mostrar todos los registros de nómina
     public function vistaNomina() {
         try {
             $listaNomina = $this->modelo->obtenerNominas();
@@ -23,15 +21,12 @@ class ControladorNomina {
         }
     }
 
-    // Mostrar formulario de creación (si es por separado)
     public function mostrarFormulario() {
         include 'Vista/crear_Eliminar.php';
     }
 
-    // Guardar o crear nuevo registro de nómina
     public function crearNomina($datos) {
         try {
-            // Validar datos antes de enviarlos al modelo
             if (isset($datos['campo1'], $datos['campo2'], $datos['campo3'])) {
                 $this->modelo->agregarNomina($datos);
                 header("Location: index.php?accion=verNomina");
@@ -57,7 +52,6 @@ class ControladorNomina {
         }
     }
 
-    // Eliminar una nómina
     public function eliminarNomina($id) {
         try {
             if (isset($id)) {
