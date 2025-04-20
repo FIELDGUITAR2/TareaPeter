@@ -15,7 +15,7 @@ class ProcesoNomina {
     private $salarioSegunDias;
     public $auxTransporte;
     private $diasLaborados; // Días laborados por el empleado
-    private $salarioMinimo2025; // Salario mínimo del año 2025;
+    private $salarioMinimo2025 = 1423500; // Salario mínimo del año 2025;
     private $auxilioTransporteMensual = 200000; // Auxilio de transporte mensual;
     private $vacacionesDisfrutadas; // Valor de las vacaciones disfrutadas;
     private $vacacionesCompensadas; // Valor de las vacaciones compensadas
@@ -26,13 +26,13 @@ class ProcesoNomina {
 
     public function __construct($empleado) {
         $this->empleado = $empleado;
-        $this->salarioMinimo2025 = 1423500; // Salario mínimo del año 2025
+        
     }
 
 
     // Calcular recargo nocturno (35% adicional)
     public function calcularRecargoNocturno($horasNocturnas) {
-        $salarioMinimo2025 = 1423500; 
+
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $recargo = $valorHora * 0.35; // 35% de recargo nocturno
         $this->recargoNocturno = $recargo * $horasNocturnas;
@@ -41,7 +41,7 @@ class ProcesoNomina {
 
     // Calcular horas extras diurnas (25% adicional)
     public function calcularHorasExtrasDiurnas($horasExtras) {
-        $salarioMinimo2025 = 1423500;
+
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $extraDiurna = $valorHora * 1.25; // 25% adicional
         $this->extraTurno = $extraDiurna * $horasExtras;
@@ -50,7 +50,7 @@ class ProcesoNomina {
 
     // Calcular horas extras nocturnas (75% adicional)
     public function calcularHorasExtrasNocturnas($horasExtrasNocturnas) {
-        $salarioMinimo2025 = 1423500;
+
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $extraNocturna = $valorHora * 1.75; // 75% adicional
         $this->extraTurno = $extraNocturna * $horasExtrasNocturnas;
@@ -59,7 +59,7 @@ class ProcesoNomina {
 
     // Calcular horas dominicales y festivas (100% adicional)
     public function calcularHorasDominicales($horasDominicales) {
-        $salarioMinimo2025 = 1423500;
+
         $valorHora = $salarioMinimo2025 / 240; // 240 horas laborales al mes
         $recargoDominical = $valorHora * 2; // 100% adicional
         $this->horasDominicales = $recargoDominical * $horasDominicales;
