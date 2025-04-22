@@ -13,7 +13,7 @@ class procesoDevengados {
     private $horasDominicales;
     private $auxAlimentacionNoPrestacional;
     private $empleado;
-    private $salarioMinimo2025 = 1300000; // Salario mínimo para el año 2025
+    private $salarioMinimo2025 = 1423500; 
     private $auxilioTransporteMensual = 200000; // Auxilio de transporte mensual
     private $auxTransporte;
     private $incapacidadEmpleador;

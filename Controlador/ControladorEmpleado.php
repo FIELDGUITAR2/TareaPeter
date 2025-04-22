@@ -1,6 +1,11 @@
 <?php
 require_once 'app/modelo/Empleado.php';
 require_once 'lib/fpdf/fpdf.php';
+require_once 'Modelo/Empleado.php';
+
+$empleados = Empleado::obtenerTodos();
+include 'Vista/vista_Empleado.php';
+
 
     class ControladorEmpleado {
         public function mostrarEmpleados() {

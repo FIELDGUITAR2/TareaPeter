@@ -1,11 +1,8 @@
-<?php
-    include('Templates/cabecera.php');
-?>
+<?php include('Templates/cabecera.php'); ?>
 
 <div class="container">
     <div class="row">
-
-        <form action="fEditar md-5">
+        <form action="fEditar.php" method="POST">
             <div class="card mt-5">
                 <div class="card-header">Editar Empleado</div>
                 <div class="card-body">
@@ -20,30 +17,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($listaNomina as $nomina): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($empleado['nombre']) ?></td>
-                                <td><?= htmlspecialchars($empleado['centrocosto']) ?></td>
-                                <td>$<?= number_format($empleado['cargo'], 0, ',', '.') ?></td>
-                                <td>$<?= number_format($empleado['sueldo'], 0, ',', '.') ?></td>
-                                <td>$<?= number_format($empleado['identificacion'], 0, ',', '.') ?></td>
-                            </tr>
+                            <?php foreach ($empleados as $empleado): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($empleado['nombre']) ?></td>
+                                    <td><?= htmlspecialchars($empleado['centrocosto']) ?></td>
+                                    <td><?= htmlspecialchars($empleado['cargo']) ?></td>
+                                    <td>$<?= number_format($empleado['sueldo'], 0, ',', '.') ?></td>
+                                    <td><?= htmlspecialchars($empleado['identificacion']) ?></td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                EnviarCambios
-            </button>
-            <button type="reset" class="btn btn-primary">
-                Borrar
-            </button>
+            <button type="submit" class="btn btn-primary">Enviar Cambios</button>
+            <button type="reset" class="btn btn-secondary">Borrar</button>
         </form>
+    </div>
+</div>
 
-
-        <?php
-    include('Templates/pie.php');
-?>
+<?php include('Templates/pie.php'); ?>
