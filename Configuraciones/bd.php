@@ -2,7 +2,7 @@
 class Database {
     private $host = "localhost";
     private $usuario = "root";
-    private $contrasena = "";
+    private $contrasena = "123456";
     private $base_datos = "Nomina";
 
     public $conexion;

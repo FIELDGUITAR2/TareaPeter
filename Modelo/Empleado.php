@@ -67,7 +67,8 @@ class Empleado{
     
     public static function obtenerTodos() {
         try {
-            $conexion = new PDO("mysql:host=localhost;dbname=Nomina", "root", "");
+            $db = new Database(); 
+            $this->conexion = $db->conexion; 
             $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
             $sql = "SELECT 
