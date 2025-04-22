@@ -1,79 +1,61 @@
 <?php
 require_once 'Empleado.php';
+require_once 'Nomina.php';
 
 class ControladorEmpleado {
+    private $pdo;
+
+    public function __construct() {
+        $this->pdo = new PDO('mysql:host=localhost;dbname=nomina_db', 'usuario_nomina', 'contraseña_segura');
+    }
+
     public function mostrarEmpleados() {
-        $empleados = Empleado::obtenerTodos();
+        $stmt = $this->pdo->query("SELECT e.*, n.fecha_nomina 
+                                  FROM empleados e 
+                                  LEFT JOIN nominas n ON e.nomina_id = n.id");
+        $empleados = $stmt->fetchAll(PDO::FETCH_CLASS, 'Empleado');
         include 'vista_Empleado.php';
     }
 
-    public function crearEmpleado() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Extraer datos del formulario
-            $empleado = new Empleado(
-                $_POST['nombre'],
-                $_POST['apellido'],
-                $_POST['centro_costo'],
-                $_POST['cargo'],
-                $_POST['sueldo'],
-                $_POST['identificacion'],
-                $_POST['dias_laborados'] ?? 0,
-                $_POST['salario_base'] ?? 0,
-                $_POST['tipo_contrato'] ?? '',
-                isset($_POST['tiene_aux_transporte']),
-                $_POST['aux_alimentacion'] ?? 0
-            );
-            $empleado->guardar();
-            header('Location: index.php?accion=empleados');
-        } else {
-            include 'vista_crear_Empleado.php';
-        }
+    public function obtenerPorId($id) {
+        $stmt = $this->pdo->prepare("SELECT * FROM empleados WHERE id = ?");
+        $stmt->execute([$id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Empleado');
+        return $stmt->fetch();
+    }
+
+    public function crearEmpleado($datos, $nominaId = null) {
+        $empleado = new Empleado(
+            $datos['nombre'],
+            $datos['apellido'],
+            $datos['centro_costo'],
+            $datos['cargo'],
+            $datos['sueldo'],
+            $datos['identificacion'],
+            $datos['dias_laborados'] ?? 0,
+            $datos['salario_base'] ?? 0,
+            $datos['tipo_contrato'] ?? '',
+            isset($datos['tiene_aux_transporte']),
+            $datos['aux_alimentacion'] ?? 0,
+            $nominaId
+        );
+        $empleado->guardar();
+        return $empleado;
+    }
+
+    public function asignarNomina($empleadoId, $nominaId) {
+        $stmt = $this->pdo->prepare("UPDATE empleados SET nomina_id = ? WHERE id = ?");
+        return $stmt->execute([$nominaId, $empleadoId]);
     }
 
     public function eliminarEmpleado($id) {
-        Empleado::eliminar($id);
-        header('Location: index.php?accion=empleados');
-    }
-    
-    public function crearNomina() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // 1. Obtener empleado
-            $empleado = Empleado::obtenerPorId($_POST['empleado_id']);
-            
-            // 2. Crear nómina
-            $nomina = new Nomina($empleado, $_POST['fecha_nomina']);
-            
-            // 3. Agregar devengados
-            $nomina->agregarDevengado('Salario básico', $_POST['salario']);
-            $nomina->agregarDevengado('Horas extras', $_POST['horas_extras']);
-            $nomina->agregarDevengado('Auxilio transporte', $_POST['aux_transporte']);
-            
-            // 4. Agregar deducciones
-            $nomina->agregarDeduccion('Salud', $_POST['salud']);
-            $nomina->agregarDeduccion('Pensión', $_POST['pension']);
-            
-            // 5. Guardar en base de datos
-            $this->guardarNominaEnBD($nomina);
-            
-            header('Location: ver_nomina.php?id=' . $nomina->getId());
-        } else {
-            $empleados = Empleado::obtenerTodos();
-            include 'vista_crear_nomina.php';
-        }
+        $stmt = $this->pdo->prepare("DELETE FROM empleados WHERE id = ?");
+        return $stmt->execute([$id]);
     }
 
-    private function guardarNominaEnBD(Nomina $nomina) {
-        $pdo = new PDO(...);
-        $stmt = $pdo->prepare("INSERT INTO nominas 
-            (empleado_id, fecha, devengados, deducciones) 
-            VALUES (?, ?, ?, ?)");
-        $stmt->execute([
-            $nomina->getEmpleado()->getId(),
-            $nomina->getFecha(),
-            json_encode($nomina->getDevengados()),
-            json_encode($nomina->getDeducciones())
-        ]);
-        $nomina->setId($pdo->lastInsertId());
+    public function obtenerEmpleadosPorNomina($nominaId) {
+        $stmt = $this->pdo->prepare("SELECT * FROM empleados WHERE nomina_id = ?");
+        $stmt->execute([$nominaId]);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, 'Empleado');
     }
-
 }

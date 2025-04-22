@@ -12,6 +12,7 @@ class Empleado {
     public $tipoContrato;
     public $tieneDerechoAuxTransporte;
     public $auxAlimentacionNoPrestacional;
+    private $nominaId;
 
     public function __construct($nombre, $apellido, $centroCosto, $cargo, $sueldo, $identificacion, $diasLaborados = 0, $salarioBase = 0, $tipoContrato = '', $tieneDerechoAuxTransporte = false, $auxAlimentacionNoPrestacional = 0) {
         $this->nombre = $nombre;
@@ -43,26 +44,46 @@ class Empleado {
     public function setAuxAlimentacionNoPrestacional($valor) { $this->auxAlimentacionNoPrestacional = $valor; }
     public function setDiasLaborados($diasLaborados) { $this->diasLaborados = $diasLaborados; } // Corregido
 
-    // Método para guardar en la base de datos
     public function guardar() {
         $pdo = new PDO('mysql:host=localhost;dbname=nomina_db', 'usuario_nomina', 'contraseña_segura');
-        $stmt = $pdo->prepare("INSERT INTO empleados (nombre, apellido, centro_costo, cargo, sueldo, identificacion, dias_laborados, salario_base, tipo_contrato, tiene_aux_transporte, aux_alimentacion) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $this->nombre,
-            $this->apellido,
-            $this->centroCosto,
-            $this->cargo,
-            $this->sueldo,
-            $this->identificacion,
-            $this->diasLaborados,
-            $this->salarioBase,
-            $this->tipoContrato,
-            $this->tieneDerechoAuxTransporte,
-            $this->auxAlimentacionNoPrestacional
-        ]);
-        $this->id = $pdo->lastInsertId();
+        if ($this->id) {
+            // Actualización
+            $stmt = $pdo->prepare("UPDATE empleados SET 
+                nombre = ?, apellido = ?, centro_costo = ?, cargo = ?, sueldo = ?, 
+                identificacion = ?, dias_laborados = ?, salario_base = ?, tipo_contrato = ?, 
+                tiene_aux_transporte = ?, aux_alimentacion = ?, nomina_id = ? 
+                WHERE id = ?");
+            $stmt->execute([
+                // ... otros campos
+                $this->nominaId,
+                $this->id
+            ]);
+        } else {
+            // Inserción
+            $stmt = $pdo->prepare("INSERT INTO empleados 
+                (nombre, apellido, centro_costo, cargo, sueldo, identificacion, 
+                dias_laborados, salario_base, tipo_contrato, tiene_aux_transporte, 
+                aux_alimentacion, nomina_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([
+                // ... otros campos
+                $this->nominaId
+            ]);
+            $this->id = $pdo->lastInsertId();
+        }
     }
+
+    // Método para obtener la nómina asociada
+    public function obtenerNomina() {
+        if ($this->nominaId) {
+            $pdo = new PDO('mysql:host=localhost;dbname=nomina_db', 'usuario_nomina', 'contraseña_segura');
+            $stmt = $pdo->prepare("SELECT * FROM nominas WHERE id = ?");
+            $stmt->execute([$this->nominaId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return null;
+    }
+
 
     // Método estático para obtener todos los empleados
     public static function obtenerTodos() {
