@@ -13,18 +13,7 @@
 <body>
     <nav class="navbar navbar-expand navbar-light bg-light">
         <div class="nav navbar-nav">
-            <a class="nav-item nav-link active" href="principal.php" aria-current="page">
-                Home
-            </a>
-            <a class="nav-item nav-link" href="crear_Eliminar.php">
-                Crear o eliminar empleados
-            </a>
-            <a class="nav-item nav-link" href="vista_Empleado.php">
-                Editar Empleado
-            </a>
-            <a class="nav-item nav-link" href="vista_Nomina.php">
-                Mostrar Nomina
-            </a>
+            
         </div>
     </nav>
     <div class="container">
